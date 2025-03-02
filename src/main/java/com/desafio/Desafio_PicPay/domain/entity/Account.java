@@ -1,6 +1,6 @@
 package com.desafio.Desafio_PicPay.domain.entity;
 
-import com.desafio.Desafio_PicPay.domain.dtos.AccountRequestDTO;
+import com.desafio.Desafio_PicPay.domain.dtos.AccountDTO;
 
 import java.util.UUID;
 
@@ -11,7 +11,7 @@ public class Account {
     private Double payee;
     private UUID uuid;
 
-    public Account(AccountRequestDTO accountDTO) {
+    public Account(AccountDTO accountDTO) {
         this.value = accountDTO.value();
         this.payer = accountDTO.payer();
         this.payee = accountDTO.payee();
