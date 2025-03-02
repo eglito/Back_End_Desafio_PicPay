@@ -5,8 +5,10 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.UUID;
 
-@Table(name = "users")
+
+@Table(name = "\"users\"")
 @Entity(name = "users")
 @Setter
 @Getter
@@ -17,19 +19,18 @@ public class UserEntity {
 
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
-    @Column(unique = true, length = 150)
+    @GeneratedValue(generator = "UUID")
+    @Column(name = "id", updatable = false, nullable = false)
+    private UUID id;
+    @Column(length = 150)
     private String name;
-    @Column(unique = true) //Diz que o CPF não pode se repetir
+    @Column(unique = true)
     private String cpf;
     @Column(unique = true)
     private String email;
-    @Column(unique = true)
     private String password;
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "account_id", referencedColumnName =  "id")
+    @JoinColumn(name = "account")
     private AccountEntity account;
 
     public UserEntity(UserRequestDTO userRequestDTO) {
@@ -39,4 +40,5 @@ public class UserEntity {
         this.password = userRequestDTO.password();
         this.account = new AccountEntity();
     }
+
 }
