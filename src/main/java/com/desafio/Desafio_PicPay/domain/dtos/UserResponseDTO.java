@@ -6,7 +6,7 @@ import com.desafio.Desafio_PicPay.domain.entity.Account;
 public record UserResponseDTO(
         String name,
         String email,
-        String cpf,
-        AccountEntity account
+        String cpf
+        //AccountEntity account
 ) {
 }
