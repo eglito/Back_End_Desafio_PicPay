@@ -1,13 +1,13 @@
 package com.desafio.Desafio_PicPay.domain.entity;
 
-import com.desafio.Desafio_PicPay.domain.dtos.AccountRequestDTO;
+import com.desafio.Desafio_PicPay.domain.dtos.AccountDTO;
 import com.desafio.Desafio_PicPay.domain.dtos.UserRequestDTO;
 
 import java.util.UUID;
 
 public class User {
 
-    private UUID uuid;
+    private UUID id;
     private String name;
     private String cpf;
     private String email;
@@ -26,10 +26,10 @@ public class User {
     }
 
     public UUID getUuid(){
-        return this.uuid;
+        return this.id;
     }
 
-    public void setAccount(AccountRequestDTO accountDTO){
+    public void setAccount(AccountDTO accountDTO){
         this.account = new Account(accountDTO);
     }
 
