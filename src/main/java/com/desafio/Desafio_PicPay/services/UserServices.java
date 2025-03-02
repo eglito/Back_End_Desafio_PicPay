@@ -1,68 +1,93 @@
 package com.desafio.Desafio_PicPay.services;
 
-import com.desafio.Desafio_PicPay.adapters.outputAdapters.AccountEntity;
 import com.desafio.Desafio_PicPay.adapters.outputAdapters.UserEntity;
+import com.desafio.Desafio_PicPay.domain.dtos.EmailResponseDTO;
 import com.desafio.Desafio_PicPay.domain.dtos.UserRequestDTO;
 import com.desafio.Desafio_PicPay.domain.dtos.UserResponseDTO;
-import com.desafio.Desafio_PicPay.repositorios.AccountRepository;
 import com.desafio.Desafio_PicPay.repositorios.UserRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.UUID;
 
 @Service
-@RequiredArgsConstructor
 public class UserServices {
 
+
+    private final UserRepository repository;
+
     @Autowired
-    private UserRepository repository;
-    private AccountRepository accountRepository;
-
-
-    public void creatUser(UserRequestDTO userRequestDTODTO){
-        UserEntity newUserEntity = new UserEntity(userRequestDTODTO);
-        repository.save(newUserEntity);
+    public UserServices(UserRepository repository) {
+        this.repository = repository;
     }
 
-    public ResponseEntity<UserResponseDTO> getUser(Long id){
+    public UserResponseDTO createUser(UserRequestDTO userRequestDTO){
+        UserEntity newUserEntity = new UserEntity(userRequestDTO);
+        repository.save(newUserEntity);
 
-        UserEntity userEntity = (UserEntity) repository.findAllById(id).get();
+        return new UserResponseDTO(
+                newUserEntity.getName(),
+                newUserEntity.getCpf(),
+                newUserEntity.getEmail()
+        );
+    }
+
+    public ResponseEntity<UserResponseDTO> getUser(UUID id){
+
+        UserEntity userEntity =  repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado!"));
 
         UserResponseDTO userResponseDTO = new UserResponseDTO(
                 userEntity.getName(),
                 userEntity.getEmail(),
-                userEntity.getCpf(),
-                userEntity.getAccount());
+                userEntity.getCpf());
 
         return ResponseEntity.ok(userResponseDTO);
     }
 
-    public ResponseEntity updateUser(UserRequestDTO userRequestDTO, Long id){
+    public ResponseEntity updateUser(UserRequestDTO userRequestDTO, UUID id){
 
-        UserEntity userEntity = (UserEntity) repository.findAllById(id).get();
-        if(userEntity.getName() != userRequestDTO.name()){
-            userEntity.setName(userEntity.getName());
+        UserEntity userEntity = repository.findById(id)
+                                          .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+
+        if(!userEntity.getName().equals(userRequestDTO.name())){
+            userEntity.setName(userRequestDTO.name());
         }
-        if(userEntity.getCpf() != userRequestDTO.cpf()){
+        if(!userEntity.getCpf().equals(userRequestDTO.cpf())){
             userEntity.setCpf(userRequestDTO.cpf());
         }
-        if(userEntity.getEmail() != userRequestDTO.email()){
-            userEntity.setCpf(userRequestDTO.cpf());
+        if(!userEntity.getEmail().equals(userRequestDTO.email())){
+            userEntity.setEmail(userRequestDTO.email());
         }
-        if(userEntity.getPassword() != userRequestDTO.password()){
+        if(!userEntity.getPassword().equals(userRequestDTO.password())){
             userEntity.setPassword(userRequestDTO.password());
         }
+
+        repository.save(userEntity);
 
         return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity deleteUser(Long id){
+    public ResponseEntity deleteUser(UUID id){
 
-        repository.findAllById(id).remove();
+        if(!repository.existsById(id)){
+            return ResponseEntity.notFound().build();
+        }
+
+        repository.deleteById(id);
         return ResponseEntity.ok().build();
+    }
 
+    public List<EmailResponseDTO> getAll(){
+
+        List<UserEntity> users = repository.findAll();
+        List<EmailResponseDTO> listEmails = users.stream()
+                                    .map(email -> new EmailResponseDTO(email.getEmail()))
+                                    .toList();
+        return listEmails;
     }
 
 }
