@@ -1,5 +1,6 @@
 package com.desafio.Desafio_PicPay.adapters.outputAdapters;
 
+import com.desafio.Desafio_PicPay.domain.TypeAccount;
 import com.desafio.Desafio_PicPay.domain.dtos.UserRequestDTO;
 import jakarta.persistence.*;
 import lombok.*;
@@ -26,6 +27,8 @@ public class UserEntity {
     private String name;
     @Column(unique = true)
     private String cpf;
+    @Enumerated(EnumType.STRING)
+    private TypeAccount status;
     @Column(unique = true)
     private String email;
     private String password;
@@ -36,6 +39,7 @@ public class UserEntity {
     public UserEntity(UserRequestDTO userRequestDTO) {
         this.name = userRequestDTO.name();
         this.email = userRequestDTO.email();
+        this.status = userRequestDTO.status();
         this.cpf = userRequestDTO.cpf();
         this.password = userRequestDTO.password();
         this.account = new AccountEntity();
