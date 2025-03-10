@@ -6,6 +6,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 
+import java.util.UUID;
+
+
 @Table(name = "accounts")
 @Entity
 @Getter
@@ -15,8 +18,8 @@ public class AccountEntity {
 
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(generator = "UUID")
+    private UUID id;
     private Double value;
     private Double payer;
     private Double payee;
