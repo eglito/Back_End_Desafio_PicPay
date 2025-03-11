@@ -3,7 +3,6 @@ package com.desafio.Desafio_PicPay.services;
 import com.desafio.Desafio_PicPay.adapters.outputAdapters.AccountEntity;
 import com.desafio.Desafio_PicPay.adapters.outputAdapters.UserEntity;
 import com.desafio.Desafio_PicPay.domain.dtos.AccountDTO;
-import com.desafio.Desafio_PicPay.domain.entity.Account;
 import com.desafio.Desafio_PicPay.repositorios.AccountRepository;
 import com.desafio.Desafio_PicPay.repositorios.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,32 +37,17 @@ public class AccountServices {
         AccountEntity account = getAccount(id);
 
         AccountDTO accountDTO = new AccountDTO(
-                account.getValue(),
-                account.getPayer(),
-                account.getPayee());
-
+                account.getBalance());
         return ResponseEntity.ok(accountDTO);
     }
 
     public  ResponseEntity putAccount(UUID id, AccountDTO accountDTO){
 
         AccountEntity accountEntity = getAccount(id);
-
-        if(accountEntity.getValue() != accountDTO.value()){
-            accountEntity.setValue(accountDTO.value());
-        }
-        if(accountEntity.getPayer() != accountDTO.payer()){
-            accountEntity.setPayer(accountDTO.payer());
-        }
-        if(accountEntity.getPayee() != accountDTO.payee()){
-            accountEntity.setPayee(accountDTO.payee());
-        }
-
+        accountEntity.setBalance(accountDTO.balance());
         accountRepository.save(accountEntity);
 
-
         return ResponseEntity.ok().build();
-
     }
 
 }
