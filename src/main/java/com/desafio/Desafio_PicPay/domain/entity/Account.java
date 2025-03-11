@@ -12,9 +12,7 @@ public class Account {
     private UUID uuid;
 
     public Account(AccountDTO accountDTO) {
-        this.value = accountDTO.value();
-        this.payer = accountDTO.payer();
-        this.payee = accountDTO.payee();
+        this.value = accountDTO.balance();
     }
 
     public UUID getUuid() {
@@ -29,19 +27,4 @@ public class Account {
         this.value = value;
     }
 
-    public Double getPayer() {
-        return payer;
-    }
-
-    public void setPayer(Double payer) {
-        this.payer = payer;
-    }
-
-    public Double getPayee() {
-        return payee;
-    }
-
-    public void setPayee(Double payee) {
-        this.payee = payee;
-    }
 }
