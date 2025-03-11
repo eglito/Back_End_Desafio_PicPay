@@ -28,11 +28,11 @@ public class TransferServices {
         UserEntity userEntityTransmitter = userRepository.findById(iDTransmitter).get();
         UserEntity userEntityReceiver = userRepository.findById(iDReceiver).get();
 
-        if(userEntityTransmitter.getStatus().equals(TypeAccount.CORPORATE) &&
+        if(!userEntityTransmitter.getStatus().equals(TypeAccount.CORPORATE) &&
             userEntityReceiver.getStatus().equals(TypeAccount.PERSONAL)){
-            return true;
+            return false;
         }
-        return false;
+        return true;
     }
 
     public ResponseEntity<Void> trasferAccount (UUID iDTransmitter, AccountDTO dtoTransmitter, UUID iDReceiver, AccountDTO dtoReceiver){
@@ -47,15 +47,4 @@ public class TransferServices {
 
 
 }
-/*
-    public ResposeEntity<> transer(iDTransmitter UUID, iDReceiver UUID){
 
-
-
-
-        - Acessar o Repositório User e "pegar" o Id presente na coluna account
-        - Inserir esse iD em uma variável
-        - Usar essa variável para realizar a busca no repositório Account
-        -
-    }
- */
