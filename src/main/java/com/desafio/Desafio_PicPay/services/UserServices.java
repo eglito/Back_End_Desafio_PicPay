@@ -24,6 +24,11 @@ public class UserServices {
     }
 
     public UserResponseDTO createUser(UserRequestDTO userRequestDTO){
+
+        if(userRequestDTO.status() == null){
+            throw new IllegalArgumentException("Tipo de conta não foi informada");
+        }
+
         UserEntity newUserEntity = new UserEntity(userRequestDTO);
         repository.save(newUserEntity);
 
@@ -58,6 +63,9 @@ public class UserServices {
         }
         if(!userEntity.getCpf().equals(userRequestDTO.cpf())){
             userEntity.setCpf(userRequestDTO.cpf());
+        }
+        if(!userEntity.getStatus().equals(userRequestDTO.status())) {
+            userEntity.setStatus(userRequestDTO.status());
         }
         if(!userEntity.getEmail().equals(userRequestDTO.email())){
             userEntity.setEmail(userRequestDTO.email());
