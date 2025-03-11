@@ -1,7 +1,6 @@
 package com.desafio.Desafio_PicPay.adapters.inputAdapters;
 
 import com.desafio.Desafio_PicPay.domain.dtos.AccountDTO;
-import com.desafio.Desafio_PicPay.domain.dtos.EmailResponseDTO;
 import com.desafio.Desafio_PicPay.services.AccountServices;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +24,7 @@ public class AccountController {
         return ResponseEntity.ok(services.returnAccount(id).getBody());
     }
 
-    @PostMapping("/update/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity updateAccount(@RequestBody AccountDTO accountDTO, @PathVariable UUID id){
         return ResponseEntity.ok(services.putAccount(id, accountDTO).getBody());
     }
