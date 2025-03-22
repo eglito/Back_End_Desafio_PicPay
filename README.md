@@ -71,7 +71,7 @@ Endpoint responsável pela realização de tranferências entre contas.
 - **Corpo da requisição:**
   ```json
   {
-    "value": "0.0", //valor que será tranferido
+    "value": "0.0",
     "iD/UUID payer": "",
     "iD/UUID payee": ""
   }
