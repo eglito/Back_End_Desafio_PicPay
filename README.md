@@ -98,9 +98,3 @@ Endpoints responsáveis por recuperar e a alterar o saldo do usário através do
   {
     "balance": "0.0"
   }
-
-
-# Estrtura do projeto:
-
-# Banco de dados:
-
