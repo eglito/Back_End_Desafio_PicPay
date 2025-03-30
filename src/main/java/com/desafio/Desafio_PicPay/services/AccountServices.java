@@ -14,7 +14,7 @@ import java.util.UUID;
 @Service
 public class AccountServices {
 
-    public final AccountRepository accountRepository;
+    private final AccountRepository accountRepository;
     private final UserRepository userRepository;
 
     @Autowired
@@ -23,7 +23,7 @@ public class AccountServices {
         this.userRepository = userRepository;
     }
 
-    public AccountEntity getAccount(UUID id){
+    private AccountEntity getAccountId(UUID id){
 
         UserEntity userEntity = userRepository.findById(id).get();
         AccountEntity accountEntity = userEntity.getAccount();
@@ -34,8 +34,7 @@ public class AccountServices {
 
     public ResponseEntity<AccountDTO> returnAccount(UUID id){
 
-        AccountEntity account = getAccount(id);
-
+        AccountEntity account = getAccountId(id);
         AccountDTO accountDTO = new AccountDTO(
                 account.getBalance());
         return ResponseEntity.ok(accountDTO);
@@ -43,7 +42,7 @@ public class AccountServices {
 
     public  ResponseEntity putAccount(UUID id, AccountDTO accountDTO){
 
-        AccountEntity accountEntity = getAccount(id);
+        AccountEntity accountEntity = getAccountId(id);
         accountEntity.setBalance(accountDTO.balance());
         accountRepository.save(accountEntity);
 
