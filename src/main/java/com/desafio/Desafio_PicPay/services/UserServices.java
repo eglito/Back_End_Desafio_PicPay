@@ -34,8 +34,8 @@ public class UserServices {
 
         return new UserResponseDTO(
                 newUserEntity.getName(),
-                newUserEntity.getCpf(),
-                newUserEntity.getEmail()
+                newUserEntity.getEmail(),
+                newUserEntity.getCpf()
         );
     }
 
