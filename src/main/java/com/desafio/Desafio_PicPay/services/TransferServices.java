@@ -17,36 +17,31 @@ public class TransferServices {
 
     @Autowired
     private final AccountRepository accountRepository;
+
+    @Autowired
     private final UserRepository userRepository;
 
-    public TransferServices(AccountRepository accountRepository, UserRepository userRepository){
+    @Autowired
+    private CheckStatusService checkStatusService;
+
+    public TransferServices(AccountRepository accountRepository, UserRepository userRepository, CheckStatusService checkStatusService){
         this.accountRepository = accountRepository;
         this.userRepository = userRepository;
-    }
-
-    //Verificação do status de contas
-    public boolean checkTransferForStatus(UUID iDTransmitter, UUID iDReceiver){
-
-        UserEntity userEntityTransmitter = userRepository.findById(iDTransmitter).get();
-        UserEntity userEntityReceiver = userRepository.findById(iDReceiver).get();
-
-        if(userEntityTransmitter.getStatus().equals(TypeAccount.CORPORATE) &&
-            userEntityReceiver.getStatus().equals(TypeAccount.PERSONAL)){
-            return false;
-        }
-        return true;
+        this.checkStatusService = checkStatusService;
     }
 
     public ResponseEntity<Void> trasferAccount (TransferDTO transferDTO){
 
-        if(!checkTransferForStatus(transferDTO.payer(), transferDTO.payee())){
+        boolean checkTest = this.checkStatusService.checkTransferForStatus(transferDTO.payer(), transferDTO.payee());
+
+        if(!checkTest){
             throw new IllegalArgumentException("CORPORATE não podem transferir para PERSONAL");
         }
 
-        UserEntity userEntityTransmitter = userRepository.findById(transferDTO.payer()).get();
-        AccountEntity accountTransmitter = userEntityTransmitter.getAccount();
-        UserEntity userEntityReceiver = userRepository.findById(transferDTO.payee()).get();
-        AccountEntity accountReceiver = userEntityReceiver.getAccount();
+        UserEntity sender = userRepository.findById(transferDTO.payer()).get();
+        AccountEntity accountTransmitter = sender.getAccount();
+        UserEntity receiver = userRepository.findById(transferDTO.payee()).get();
+        AccountEntity accountReceiver = receiver.getAccount();
 
         if(accountTransmitter.getBalance() >= transferDTO.value()){
             accountTransmitter.setBalance(accountTransmitter.getBalance() - transferDTO.value());
